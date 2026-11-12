@@ -1,7 +1,7 @@
-# id;папка;название (порядок загрузки: террейн -> геймплей -> косметика -> одежда -> фреймворк -> админ-тулзы)
+# id;папка;название (порядок загрузки: террейн -> геймплей -> косметика -> одежда -> фреймворк)
+# ZomBerry временно убран: контейнер не может скачать его, пока Steam Guard требует код на новой машине
 2289456201;NamalskIsland;Namalsk Island (terrain)
 2289461232;NamalskSurvival;Namalsk Survival (gameplay + missions)
 2967593370;NamalskRedux;Namalsk Redux (winter surfaces)
 2319479581;NamalskClothingExpansion;Namalsk Clothing Expansion (56 MB)
 1559212036;CF;Community Framework
-1582756848;ZomBerry;ZomBerry Admin Tools 0.8.0 (админ-меню в игре, без RCon и без зависимостей)
