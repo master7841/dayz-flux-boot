@@ -147,6 +147,33 @@ if [ -f "$CFGDIR/admins.txt" ] && [ -d "$MPDIR/$MISSION" ]; then
   log "admins.txt: $(grep -vcE '^[[:space:]]*(#|$)' "$MPDIR/$MISSION/admins.txt" || echo 0) записей"
 fi
 
+# ZomBerry: прописываем админов из config/admins.txt, чтобы не проходить SETUP TOKEN вручную
+if [ -d "$MODSDIR/ZomBerry" ]; then
+  ZBDIR="$PROFILES/ZomBerry"
+  ZB_FILE="$ZBDIR/ZomBerryPermissions.json"
+  mkdir -p "$ZBDIR"
+  ZB_WRITE=0
+  [ -f "$ZB_FILE" ] || ZB_WRITE=1
+  if [ -f "$ZB_FILE" ] && [ -f "$CFGDIR/admins.txt" ]; then
+    ZB_FIRST=$(grep -vE '^[[:space:]]*(#|$)' "$CFGDIR/admins.txt" | head -1)
+    if [ -n "$ZB_FIRST" ] && ! grep -q "$ZB_FIRST" "$ZB_FILE"; then ZB_WRITE=1; fi
+  fi
+  if [ "$ZB_WRITE" = "1" ] && [ -f "$CFGDIR/admins.txt" ]; then
+    ADMINS_JSON=""
+    while read -r sid; do
+      case "${sid:-}" in ''|\#*) continue;; esac
+      [ -n "$ADMINS_JSON" ] && ADMINS_JSON="$ADMINS_JSON,"
+      ADMINS_JSON="$ADMINS_JSON{\"Id\":\"$sid\",\"Name\":\"admin\",\"Group\":\"superadmin\"}"
+    done < "$CFGDIR/admins.txt"
+    if [ -n "$ADMINS_JSON" ]; then
+      cat > "$ZBDIR/ZomBerryPermissions.json" <<JSON
+{"Groups":[{"Name":"superadmin","Level":100,"Permissions":["*"],"SpawnAllowed":["*"]},{"Name":"moderator","Level":10,"Permissions":["zomberry.players.list","zomberry.players.kick","zomberry.map.*","zomberry.functions.TPToTarget","zomberry.functions.TPToAdmin","zomberry.functions.HealTarget"],"SpawnAllowed":[]}],"Admins":[$ADMINS_JSON]}
+JSON
+      log "ZomBerry: админы прописаны в ZomBerryPermissions.json"
+    fi
+  fi
+fi
+
 cd "$SERVERDIR"
 exec ./DayZServer \
   -config="$CFGDIR/serverDZ.rendered.cfg" \
