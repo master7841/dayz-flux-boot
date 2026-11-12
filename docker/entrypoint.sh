@@ -21,6 +21,9 @@ log() { printf '[entrypoint] %s\n' "$*"; }
 : "${ADMIN_PASSWORD:=changeme}"
 : "${RCON_PASSWORD:=changeme}"
 
+# envsubst читает ОКРУЖЕНИЕ, а не шилл-переменные: без export подстановка даёт пустые строки
+export SERVER_NAME SERVER_PASSWORD ADMIN_PASSWORD MAX_PLAYERS GAME_PORT QUERY_PORT RCON_PORT MISSION RCON_PASSWORD
+
 mkdir -p "$DATA" "$CFGDIR" "$PROFILES"
 
 # --- 1. конфиги из git (fallback — то, что запечено в образ) ---
@@ -116,6 +119,7 @@ log "моды: ${MODSTR:-нет}"
 envsubst '$SERVER_NAME $SERVER_PASSWORD $ADMIN_PASSWORD $MAX_PLAYERS $QUERY_PORT $MISSION' \
   < "$CFGDIR/serverDZ.cfg" > "$CFGDIR/serverDZ.rendered.cfg"
 mkdir -p "$SERVERDIR/battleye"
+log "rendered: $(grep -E 'steamQueryPort|hostname' "$CFGDIR/serverDZ.rendered.cfg" | tr '\n' ' ')"
 envsubst '$RCON_PASSWORD $RCON_PORT' \
   < "$CFGDIR/BEServer_x64.cfg.tpl" > "$SERVERDIR/battleye/BEServer_x64.cfg" 2>/dev/null || true
 
