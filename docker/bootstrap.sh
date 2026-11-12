@@ -18,7 +18,7 @@ curl -fsSL https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.g
 
 RAW=${CFG_RAW_BASE:-https://git.sts.co.ua/sts/dayz_serv/raw/branch/dev}
 mkdir -p /opt/dayz-defaults/config
-for f in serverDZ.cfg mods.txt BEServer_x64.cfg.tpl; do
+for f in serverDZ.cfg mods.txt admins.txt BEServer_x64.cfg.tpl; do
   curl -fsSL "$RAW/config/$f" -o "/opt/dayz-defaults/config/$f" || echo "warn: $f не скачался"
 done
 curl -fsSL "$RAW/docker/entrypoint.sh" -o /tmp/entrypoint.sh

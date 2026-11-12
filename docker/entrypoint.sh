@@ -39,6 +39,7 @@ fetch_cfg() {
 }
 fetch_cfg serverDZ.cfg
 fetch_cfg mods.txt
+fetch_cfg admins.txt
 [ -f "$CFGDIR/BEServer_x64.cfg.tpl" ] || cp /opt/dayz-defaults/config/BEServer_x64.cfg.tpl "$CFGDIR/" 2>/dev/null || true
 
 # --- 2. список модов (id;папка;название) ---
@@ -131,8 +132,20 @@ envsubst '$SERVER_NAME $SERVER_PASSWORD $ADMIN_PASSWORD $MAX_PLAYERS $QUERY_PORT
   < "$CFGDIR/serverDZ.cfg" > "$CFGDIR/serverDZ.rendered.cfg"
 mkdir -p "$SERVERDIR/battleye"
 log "rendered: $(grep -E 'steamQueryPort|hostname' "$CFGDIR/serverDZ.rendered.cfg" | tr '\n' ' ')"
-envsubst '$RCON_PASSWORD $RCON_PORT' \
-  < "$CFGDIR/BEServer_x64.cfg.tpl" > "$SERVERDIR/battleye/BEServer_x64.cfg" 2>/dev/null || true
+if [ -f "$CFGDIR/BEServer_x64.cfg.tpl" ]; then
+  envsubst '$RCON_PASSWORD $RCON_PORT' < "$CFGDIR/BEServer_x64.cfg.tpl" > "$SERVERDIR/battleye/BEServer_x64.cfg"
+  # на Linux движок может искать файл в нижнем регистре — держим оба
+  cp -f "$SERVERDIR/battleye/BEServer_x64.cfg" "$SERVERDIR/battleye/beserver_x64.cfg"
+  log "battleye cfg: $(tr '\n' ' ' < "$SERVERDIR/battleye/BEServer_x64.cfg")"
+else
+  log "ОШИБКА: нет шаблона BEServer_x64.cfg.tpl — RCon не поднимется"
+fi
+
+# список админов (SteamID64) кладём в папку миссии
+if [ -f "$CFGDIR/admins.txt" ] && [ -d "$MPDIR/$MISSION" ]; then
+  cp -f "$CFGDIR/admins.txt" "$MPDIR/$MISSION/admins.txt"
+  log "admins.txt: $(grep -vcE '^[[:space:]]*(#|$)' "$MPDIR/$MISSION/admins.txt" || echo 0) записей"
+fi
 
 cd "$SERVERDIR"
 exec ./DayZServer \
