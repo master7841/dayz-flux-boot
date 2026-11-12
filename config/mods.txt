@@ -1,6 +1,7 @@
-# id;папка;название (порядок = порядок загрузки: террейн -> геймплей -> косметика -> фреймворк -> админ-тулзы)
+# id;папка;название (порядок загрузки: террейн -> геймплей -> косметика -> одежда -> фреймворк -> админ-тулзы)
 2289456201;NamalskIsland;Namalsk Island (terrain)
 2289461232;NamalskSurvival;Namalsk Survival (gameplay + missions)
 2967593370;NamalskRedux;Namalsk Redux (winter surfaces)
+2319479581;NamalskClothingExpansion;Namalsk Clothing Expansion (56 MB)
 1559212036;CF;Community Framework (зависимость COT)
 1564026768;COT;Community Online Tools (админ-меню в игре)
