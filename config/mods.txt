@@ -1,0 +1,4 @@
+# id;папка;название (порядок = порядок загрузки: террейн -> геймплей -> косметика)
+2289456201;NamalskIsland;Namalsk Island (terrain)
+2289461232;NamalskSurvival;Namalsk Survival (gameplay + missions)
+2967593370;NamalskRedux;Namalsk Redux (winter surfaces)
