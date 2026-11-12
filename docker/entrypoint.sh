@@ -7,7 +7,7 @@ SERVERDIR=$DATA/serverfiles
 MODSDIR=$DATA/mods
 PROFILES=$DATA/profiles
 CFGDIR=$DATA/config
-RAW=${CFG_RAW_BASE:-https://git.sts.co.ua/sts/dayz_serv/raw/branch}/${BRANCH:-dev}
+RAW=${CFG_RAW_BASE:-https://git.sts.co.ua/sts/dayz_serv/raw/branch/dev}
 
 log() { printf '[entrypoint] %s\n' "$*"; }
 
