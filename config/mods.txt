@@ -3,5 +3,5 @@
 2289461232;NamalskSurvival;Namalsk Survival (gameplay + missions)
 2967593370;NamalskRedux;Namalsk Redux (winter surfaces)
 2319479581;NamalskClothingExpansion;Namalsk Clothing Expansion (56 MB)
-1559212036;CF;Community Framework (зависимость COT)
-1564026768;COT;Community Online Tools (админ-меню в игре)
+1559212036;CF;Community Framework
+1582756848;ZomBerry;ZomBerry Admin Tools 0.8.0 (админ-меню в игре, без RCon и без зависимостей)
