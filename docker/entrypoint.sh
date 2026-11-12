@@ -107,9 +107,20 @@ for item in "${MODS[@]:-}"; do
   MODARGS+=("@$folder")
 done
 
-if [ ! -d "$SERVERDIR/mpmissions/$MISSION" ]; then
-  src=$(find "$MODSDIR" -maxdepth 3 -type d -name "$MISSION" 2>/dev/null | head -1 || true)
-  if [ -n "$src" ]; then cp -a "$src" "$SERVERDIR/mpmissions/" && log "миссия $MISSION скопирована из мода"; fi
+MPDIR="$SERVERDIR/mpmissions"
+if [ ! -f "$MPDIR/$MISSION/init.c" ]; then
+  # глубина важна: миссия лежит в <mod>/Extras/Regular/<mission> — это 4 уровня от $MODSDIR
+  src=$(find "$MODSDIR" -maxdepth 6 -type d -name "$MISSION" 2>/dev/null | head -1 || true)
+  if [ -n "$src" ]; then
+    mkdir -p "$MPDIR"
+    rm -rf "$MPDIR/$MISSION"
+    cp -a "$src" "$MPDIR/" && log "миссия $MISSION скопирована: $src"
+  fi
+fi
+if [ ! -f "$MPDIR/$MISSION/init.c" ]; then
+  log "ОШИБКА: в миссии $MPDIR/$MISSION нет init.c — сервер поднимется без игрового мира (player connect disabled)"
+else
+  log "миссия ok: init.c на месте ($(ls "$MPDIR/$MISSION" | wc -l) файлов)"
 fi
 
 MODSTR=$(IFS=';'; echo "${MODARGS[*]:-}")
